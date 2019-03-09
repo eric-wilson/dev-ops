@@ -1,0 +1,46 @@
+# keep your environment clean
+# prior to running this config, prune networks that aren't needed using
+# docker network prune -a
+
+# create a local docker network for the services to communicate on
+# e.g. docker network create localdev
+
+version: "3.7"
+networks: 
+  localdev: # <- same name as you used in `docker network create name-here`
+    external: 
+      name: localdev
+
+#
+services:
+  mySqlDbv8:
+    image: mysql:8  # <- change version to suite you needs
+    # v8 has some new authentication that doesn't really play nice when launching a quick docker container
+    # so we're going to tell it to use it's default values
+    command: --default-authentication-plugin=mysql_native_password
+    container_name: mysql8
+    #restart: always
+    ports:
+      - 3008:3306
+    networks:
+      - localdev      
+    environment:
+        MYSQL_ROOT_PASSWORD: pass@word123       
+    # if you want my sql to save it's data to your local drive vs inside of the container
+    # uncomment these two lines and adjust the paths to your needs
+    #volumes: 
+    #  - /Users/${USER}/working/docker/mounts/mysql8/data:/var/lib/mysql
+
+  # add phpmyadmin so you don't need to install a mysql client/workbench
+  phpmyadmin8:
+    image: phpmyadmin/phpmyadmin
+    networks:
+      - localdev
+    ports: 
+      - 8088:80
+    hostname: phpmyadmin   
+    depends_on: 
+      - mySqlDbv8
+    environment: 
+      PMA_HOST: mysql8
+      

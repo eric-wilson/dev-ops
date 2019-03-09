@@ -1,0 +1,49 @@
+# keep your environment clean
+# prior to running this config, prune networks that aren't needed using
+# docker network prune -a
+
+# create a local docker network for the services to communicate on
+# e.g. docker network create localdev
+
+version: "3.7"
+networks: 
+  localdev: # <- same name as you used in `docker network create name-here`
+    external: 
+      name: localdev
+
+#
+services: 
+  mySqlDbv5:
+    image: mysql:5.7.20  # <- change version to suite you needs
+    #command: --default-authentication-plugin=mysql_native_password
+    container_name: mysql5
+    #restart: always
+    ports:
+      - 3005:3306
+    networks:
+      - localdev      
+    environment:
+        MYSQL_ROOT_PASSWORD: pass@word123
+        
+    #volumes: 
+      # this allows you to keep the data in your local storage, otherwise it's stored in the container
+      # if you kill the container, your data is gone.  for dev purposes, you don't need to mount, but it's good to know about it
+      # mac example
+      # - /Users/${USER}/working/docker/mounts/${container_name}/data:/var/lib/mysql
+      # window example
+      # - c:\somepath:/var/lib/mysql
+  
+  # add phpmyadmin so you don't need to install a mysql client/workbench
+  phpmyadmin5:
+    image: phpmyadmin/phpmyadmin
+    networks:
+      - localdev
+    ports: 
+      - 8085:80
+    hostname: phpmyadmin   
+    depends_on: 
+      - mySqlDbv5
+    environment: 
+      PMA_HOST: mysql5
+      
+      
