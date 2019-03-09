@@ -23,7 +23,7 @@ services:
     networks:
       - localdev      
     environment:
-        MYSQL_ROOT_PASSWORD: pass@word123
+        MYSQL_ROOT_PASSWORD: g33k001
         
     #volumes: 
       # this allows you to keep the data in your local storage, otherwise it's stored in the container

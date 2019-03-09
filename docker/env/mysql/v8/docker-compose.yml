@@ -25,7 +25,7 @@ services:
     networks:
       - localdev      
     environment:
-        MYSQL_ROOT_PASSWORD: pass@word123       
+        MYSQL_ROOT_PASSWORD: g33k001       
     # if you want my sql to save it's data to your local drive vs inside of the container
     # uncomment these two lines and adjust the paths to your needs
     #volumes: 
