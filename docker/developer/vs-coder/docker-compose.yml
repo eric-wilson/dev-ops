@@ -1,0 +1,19 @@
+version: "2.1"
+services:
+  vs-code-server:
+    image: ghcr.io/linuxserver/code-server
+    container_name: vs-code-server
+    environment:
+      - PUID=1000
+      - PGID=1000
+      # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+      - TZ=America/New_York
+      - PASSWORD=password #optional (this secures the site with a login)
+      - SUDO_PASSWORD=password #optional (sets the SUDO password)
+      #- PROXY_DOMAIN=code-server.my.domain #optional
+    volumes:
+        - /tmp/vs-code-server/appdata/config:/config
+        #- /app/vs-code-server/appdata/config:/config
+    ports:
+      - 8443:8443
+    restart: unless-stopped
