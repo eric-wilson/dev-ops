@@ -1,0 +1,20 @@
+# keep your environment clean
+# prior to running this config, prune networks that aren't needed using
+# docker network prune -a
+
+# create a local docker network for the services to communicate on
+# e.g. docker network create localdev
+
+version: "3.7"
+
+services: 
+  amazon-linux:
+    build: .
+    cap_add: 
+      - ALL       
+    image: amazonlinux    
+    container_name: amazon-linux   
+    # keep it running
+    command: tail -F anything          
+    volumes:           
+      - ~/.ssh:/.ssh-mount          # mount my ssh keys           
