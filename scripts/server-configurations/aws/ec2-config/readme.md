@@ -41,7 +41,7 @@ In addition, you will need to have the correct permissions in order to:
 
 ### Roles
 
-Create a new rolw and add the following permissions.
+Create a new role and add the following permissions.
 
 ```bash
 # AWS Permissions to Read Tags, which pushes them into Environment Variables
