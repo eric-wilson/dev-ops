@@ -56,8 +56,8 @@ Create a new rolw and add the following permissions.
 #   ]
 # }
 
-## AmazonS3FullAccess (this should be brought done to the specific S3 Access on the bucket configured)
+## AmazonS3FullAccess (this should be brought down to the specific S3 Access on the bucket configured ~ least privleged, etc)
 ## CloudWatchAgenServerPolicy (to write the logs)
-## AmazonSSMFullAccess (to remote connect from the AWS console) -> you may not need full access. I still need to play around to see what the min is
-## AmazonEC2FullAccess (or talyor to your needs)
+## AmazonSSMFullAccess (to remote connect from the AWS console) -> you may not need full access. I still need to play around to see what the min privelge is
+## AmazonEC2FullAccess (or tailor to your needs)
 ```
