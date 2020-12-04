@@ -54,22 +54,9 @@ EOF
 
 # run the script
 sudo chmod +x /etc/profile.d/export_instance_tags.sh
-sudo /etc/profile.d/export_instance_tags.sh
 
-
-# repeat this (or else we'll need to reboot it to take affect.  I can't seem to get the exection of the script above to take affect right away)
-INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
-REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r .region)
-
-# export instance tags
-export_statement=$(aws ec2 describe-tags --region "$REGION" \
-                        --filters "Name=resource-id,Values=$INSTANCE_ID" \
-                        --query 'Tags[?!contains(Key, `:`)].[Key,Value]' \
-                        --output text | \
-                        sed -E 's/^([^\s\t]+)[\s\t]+([^\n]+)$/export \1="\2"/g')
-eval $export_statement
-
-
+# reload the profile so that the environment variables are available here
+source ~/.bash_profile
 
 
 # / load tags as environment variables
