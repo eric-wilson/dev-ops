@@ -245,7 +245,6 @@ sudo mkdir -p $S3_MEDIA_DIR
 # $ROLE_NAME is being pulled from an environment variable, which is loaded via the EC2 tags with a matching tag name
 # and value contains the ROLE_NAME
 sudo s3fs $BUCKET_NAME $S3_MEDIA_DIR -o iam_role=$ROLE_NAME -o allow_other -o nonempty
-#sudo s3fs praxent-axiom-database /app/s3 -o iam_role=$ROLE_NAME -o allow_other -o nonempty
 # / S3 Mounting
 #####################################################################################################################################################
 
