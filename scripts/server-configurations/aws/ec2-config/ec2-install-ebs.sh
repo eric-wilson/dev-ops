@@ -15,16 +15,18 @@ sudo yum install -y jq
 region=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r .region)
 az=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r .availabilityZone)   # az for the ebs
 device="/dev/xvdf"          # volume we're going to attach (note you may need to change this if it's alreay in use)
-mount_path="/app"  
-ebs_volume_size=1
-ebs_volume_type="gp2"
-sleepy_time="20s"
+mount_path="/app"           # change as necessary
+ebs_volume_size=1           # size in GBs
+ebs_volume_type="gp2"       # volume type
+sleepy_time="20s"           # used as a 'wait' during this process
 
 # set up our region for the cli
 export AWS_DEFAULT_REGION=${region}
 
 # create the ebs volume
-# the 8th param is the volume-id, get it w/ awk
+# the 8th param is the volume-id, get it w/ awk which we'll need later
+# there are other parameters that you can pass in, so update this script accordingly
+# https://docs.aws.amazon.com/cli/latest/reference/ec2/create-volume.html
 volume=$(aws ec2 create-volume \
         --volume-type ${ebs_volume_type}  \
         --size ${ebs_volume_size}   \
@@ -33,7 +35,7 @@ volume=$(aws ec2 create-volume \
         )
 
 
-# get the instance id
+# get the instance id of the EC2
 instance_id=$(curl http://169.254.169.254/latest/meta-data/instance-id)
 
 
@@ -48,7 +50,7 @@ aws ec2 attach-volume \
   --device ${device}
 
 
-# give it time
+# give it time to attach
 sleep ${sleepy_time}
 
 # check to see if it's empty
@@ -57,7 +59,7 @@ sudo file -s ${device}
 # format the volume
 sudo mkfs -t ext4 ${device}
 
-# give it time
+# give it time to do it's job
 sleep ${sleepy_time}
 
 # make our directory for the mount
@@ -72,7 +74,7 @@ cd $mount_path
 # see if we have nay issues
 df -h .
 
-# test it out
+# test it out (feel free to remove this)
 sudo bash -c 'sudo  echo "hello my precious ebs" > hello-ebs.txt'
 
 # automount on reboot
